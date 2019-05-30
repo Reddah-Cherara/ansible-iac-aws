@@ -1,0 +1,74 @@
+# We will have one RT for the public subnet,
+# and one for the private subnet.
+# You can see that the Route Table for the private subnet
+# will redirect default destinations to the NAT Gateway
+# and the Route Table for the public subnet will use the
+# Internet Gateway.
+# 
+# We don't see it here, but the Route Tables will also contain 
+# a route for resources inside the VPC, so that if we need 
+# to reach an internal resource, we don't go to the Internet
+# Gateway or the NAT Gateway.
+
+- name: Create the public routing table and associate to Public subnets
+  ec2_vpc_route_table:
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ vpc_region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    tags:
+      Name: "Public route table for Public zone a and b"
+    subnets:
+      - "{{ public_subnet_id_a }}"
+      - "{{ public_subnet_id_b }}"
+    routes:
+      - dest: "0.0.0.0/0"
+        gateway_id: "{{ igw_id }}"
+  register: public_route_table
+
+- name: Create the public routing table and associate to Private subnets
+  ec2_vpc_route_table:
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ vpc_region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    tags:
+      Name: "Public route table for Private zone a and b"
+    subnets:
+      - "{{ private_subnet_id_a }}"
+      - "{{ private_subnet_id_b }}"
+    routes:
+      - dest: "0.0.0.0/0"
+        gateway_id: "{{ igw_id }}"
+  register: private_route_table
+  
+
+- name: Create the routing table for each of the Private Subnet (AZ1)
+  ec2_vpc_route_table:
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ vpc_region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    tags:
+      Name: "Private route table zone a"
+    subnets:
+      - "{{ private_subnet_id_a }}"
+    routes:
+      - dest: "0.0.0.0/0"
+        gateway_id: "{{ ngw_az_a_id }}"
+  register: private_route_table_a
+
+- name: Set up private subnet route table b
+  ec2_vpc_route_table:
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ vpc_region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    tags:
+      Name: "Private route table zone b"
+    subnets:
+      - "{{ private_subnet_id_b }}"
+    routes:
+      - dest: "0.0.0.0/0"
+        gateway_id: "{{ ngw_az_b_id }}"
+  register: private_route_table_b

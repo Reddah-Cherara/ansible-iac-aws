@@ -1,0 +1,42 @@
+# ============================================================
+- name: Create new frontend load balancer if it doesn't exists in
+  ec2_elb_lb:
+    name: "frontend-load-balancer"
+    state: present
+    region: "{{ aws_region }}"
+    scheme: internet-facing
+    subnets:
+      - "{{ public_subnet_id_a }}"
+      - "{{ public_subnet_id_b }}"
+    security_group_ids: "{{ frontend_sg_id }}"
+    listeners:
+    - protocol: http
+      load_balancer_port: 80
+      instance_port: 80
+    health_check:
+      ping_protocol: http # options are http, https, ssl, tcp
+      ping_port: 80
+      ping_path: "/" # not required for tcp or ssl
+      response_timeout: 5 # seconds
+      interval: 30 # seconds
+      unhealthy_threshold: 2
+      healthy_threshold: 10
+    cross_az_load_balancing: "yes"
+- name: Create new backend load balancer if it doesn't exists in
+  ec2_elb_lb:
+    name: "backend-load-balancer"
+    state: present
+    region: "{{ aws_region }}"
+    scheme: internal
+    subnets:
+      - "{{ private_subnet_id_a }}"
+      - "{{ private_subnet_id_b }}"
+    security_group_ids: "{{ backend_sg_id }}"
+    listeners:
+    - protocol: tcp
+      load_balancer_port: 5432
+      instance_port: 5432
+    - protocol: http
+      load_balancer_port: 80
+      instance_port: 80
+    cross_az_load_balancing: "yes"

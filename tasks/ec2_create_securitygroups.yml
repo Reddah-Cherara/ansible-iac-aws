@@ -1,0 +1,89 @@
+- name: Create Frontend Security Group
+  ec2_group:
+    name: "frontend_ssh_http_access"
+    description: "External SSH Access"
+    state: present
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ aws_region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    rules:  
+      - proto: "tcp"
+        from_port: "22"
+        to_port: "22"
+        cidr_ip: "0.0.0.0/0"
+      - proto: "tcp"
+        from_port: "80"
+        to_port: "80"
+        cidr_ip: "0.0.0.0/0"
+  register: frontend_sg
+
+- name: Set Frontend SG ID
+  set_fact:
+    frontend_sg_id: "{{ frontend_sg.group_id }}"
+
+- name: Create Backend Security Group
+  ec2_group:
+    name: "backend_ssh_http_access"
+    description: "Internal SSH Access"
+    state: present
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ aws_region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    rules:  
+      - proto: "tcp"
+        from_port: "22"
+        to_port: "22"
+        cidr_ip: "0.0.0.0/0"
+      - proto: "tcp"
+        from_port: "3306"
+        to_port: "3306"
+        cidr_ip: "0.0.0.0/0"
+  register: backend_sg
+
+- name: Set Backend SG ID
+  set_fact:
+    backend_sg_id: "{{ backend_sg.group_id }}"
+
+- name: Create sshable Security Group
+  ec2_group:
+    name: "sshable"
+    description: "External SSH Access"
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ aws_region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    rules:
+      - proto: "tcp"
+        from_port: "22"
+        to_port: "22"
+        cidr_ip: "0.0.0.0/0"
+  register: sshable_sg
+
+
+- name: Get my current IP address
+  uri:
+    url: http://checkip.amazonaws.com/
+    return_content: yes
+  register: my_current_ip
+
+- debug: msg="{{ my_current_ip }}"
+
+- name: Create  security group from my current ip
+  ec2_group:
+    name: webservers
+    description: A security group for my current IP
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ aws_region }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: "{{ my_current_ip.content | replace('\n', '') }}/32"
+    rules_egress:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+  register: webservers_group

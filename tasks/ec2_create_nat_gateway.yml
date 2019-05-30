@@ -1,0 +1,38 @@
+# As you can see, we attach a NAT Gateway to a public subnet.
+# This is where the service will be located.
+# ============================================================
+- name: create NAT gateway for public subnet a
+  ec2_vpc_nat_gateway:
+    state: present
+    subnet_id: "{{ public_subnet_id_a }} "
+    region: "{{ vpc_region }}"
+    wait: yes
+    if_exist_do_not_create: true
+  register: ngw_az_a
+- debug: var=ngw_az_a
+# ============================================================
+- name: Set Nat Gateway ID in variable
+  set_fact:
+    ngw_az_a_id: "{{ ngw_az_a.nat_gateway_id }}"
+- debug: var=ngw_az_a_id
+# ============================================================
+# We pause a few seconds for the NAT Gateway to be ready.
+- pause: seconds=10
+# ============================================================
+- name: create NAT gateway for public subnet b
+  ec2_vpc_nat_gateway:
+    state: present
+    subnet_id: "{{ public_subnet_id_b }} "
+    region: "{{ vpc_region }}"
+    wait: yes
+    if_exist_do_not_create: true
+  register: ngw_az_b
+- debug: var=ngw_az_b
+- name: Set Nat Gateway ID in variable
+  set_fact:
+    ngw_az_b_id: "{{ ngw_az_b.nat_gateway_id }}"
+- debug: var=ngw_az_b_id
+# ============================================================
+# We pause a few seconds for the NAT Gateway to be ready.
+- pause: seconds=10
+# ============================================================

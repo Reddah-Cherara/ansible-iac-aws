@@ -1,0 +1,81 @@
+<html>
+
+<head>
+    <title>EC2 frontend Webserver</title>
+    <style>
+table.minimalistBlack {
+  border: 1px solid #FFAF4B;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+table.minimalistBlack td, table.minimalistBlack th {
+  border: 1px solid #FF8F1D;
+  padding: 5px 4px;
+}
+table.minimalistBlack tbody td {
+  font-size: 10px;
+}
+table.minimalistBlack thead {
+  background: #CFCFCF;
+  background: -moz-linear-gradient(top, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+  background: -webkit-linear-gradient(top, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+  background: linear-gradient(to bottom, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+}
+table.minimalistBlack thead th {
+  font-size: 12px;
+  font-weight: bold;
+  color: #000000;
+  text-align: left;
+}
+table.minimalistBlack tfoot td {
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+    <h1>Nginix !</h1>
+    <p>This Instance on AWS provisiond wuth Ansible with Architecture As Code. Wow!</p>
+     <p></p>
+     <p></p>
+    <table class="minimalistBlack">
+<thead>
+<tr>
+<th>Info</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VPC Name</td><td>{{hostvars['localhost']['vpc_name']}}</td></tr>
+<tr>
+<td>INSTANCE STATE</td><td>running</td></tr>
+<tr>
+<td>INSTANCES A IDs</td><td> {{hostvars['localhost']['ec2instance_frontend_a.instances']}}</td></tr>
+<tr>
+<td>INSTANCES A IDs</td><td>{{hostvars['localhost']['ec2instance_frontend_b.instances']}}</td></tr>
+<tr>
+<td>ENVIRONMENT</td><td>{{hostvars['localhost']['ENVIRONMENT']}}</td></tr>
+<tr>
+<td>PROJECT NAME/td><td>{{hostvars['localhost']['PROJECT_NAME']}}</td></tr>
+<tr>
+<td>REGION</td><td>{{hostvars['localhost']['REGION']}}</td></tr>
+<tr>
+<td>Consumer</td><td>{{hostvars['localhost']['Consumer']}}</td></tr>
+<tr>
+<td>COMPANY</td><td> {{hostvars['localhost']['COMPANY']}}</td></tr>
+<tr>
+<td>SUBNET ZONE A ID</td><td> {{hostvars['localhost']['public_subnet_id_a']}}</td></tr>
+<tr>
+<td>SUBNET ZONE B ID</td><td> {{hostvars['localhost']['public_subnet_id_b']}}</td></tr>
+<tr>
+<td>SG ID/td><td> {{hostvars['localhost']['frontend_sg_id']}}</td></tr>
+</tbody>
+</tr>
+</table>
+    <p>CHERARA REDDAH. Author</p>
+
+</body>
+
+</html>

@@ -1,0 +1,13 @@
+# ============================================================
+- name: allocate a new elastic IP without associating it to anything
+  ec2_eip:
+    state: present
+    region:  "{{ vpc_region }}"
+    in_vpc: yes
+  register: eip
+- debug: var=eip
+# ============================================================
+- name: Set EIP in variable
+  set_fact:
+    my_elastic_ip: "{{ eip.public_ip }}"
+- debug: var=my_elastic_ip

@@ -1,0 +1,9 @@
+- name: create a key pair to use for creating an ec2 instance
+  ec2_key:
+      name: "{{ ec2_keypair_name_new }}"
+      region: "{{ aws_region }}"
+  register: ec2_key_result
+ 
+- name: Save private key
+  copy: content="{{ ec2_key_result.key.private_key }}" dest="./files/{{ ec2_keypair_name_new }}.pem" mode=0600
+  when: ec2_key_result.changed

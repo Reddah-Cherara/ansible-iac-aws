@@ -1,0 +1,80 @@
+# Creating our only Subnet in the VPC.
+# A subnet needs to be located in an Availability Zone (or AZ).
+# Again, we register the results in a variable for later.
+# ============================================================
+- name:               Create Public Subnet of zone a
+  ec2_vpc_subnet:
+    state:            "present"
+    vpc_id:           "{{ vpc_id }}"
+    cidr:             "{{ public_subnet_a_cidr }}"
+    az:               "{{ public_subnet_a_az }}"
+    region:           "{{ vpc_region }}"
+    aws_access_key:   "{{ aws_access_key }}"
+    aws_secret_key:   "{{ aws_secret_key }}"
+    resource_tags:
+      Name:           "{{ vpc_name }} - Public Subnet"
+  register: my_public_subnet_a
+# ============================================================
+- name:               Create Public Subnet of zone b
+  ec2_vpc_subnet:
+    state:            "present"
+    vpc_id:           "{{ vpc_id }}"
+    cidr:             "{{ public_subnet_b_cidr }}"
+    az:               "{{ public_subnet_b_az }}"
+    region:           "{{ vpc_region }}"
+    aws_access_key:   "{{ aws_access_key }}"
+    aws_secret_key:   "{{ aws_secret_key }}"
+    resource_tags:
+      Name:           "{{ vpc_name }} - Public Subnet"
+  register: my_public_subnet_b
+# ============================================================
+- name:               Create Private Subnet of zone a
+  ec2_vpc_subnet:
+    state:            "present"
+    vpc_id:           "{{ vpc_id }}"
+    cidr:             "{{ private_subnet_a_cidr }}"
+    az:               "{{ private_subnet_a_az }}"
+    region:           "{{ vpc_region }}"
+    aws_access_key:   "{{ aws_access_key }}"
+    aws_secret_key:   "{{ aws_secret_key }}"
+    resource_tags:
+      Name:           "{{ vpc_name }} - Private Subnet "
+  register: my_private_subnet_a
+# ============================================================
+- name:               Create Private Subnet of zone a
+  ec2_vpc_subnet:
+    state:            "present"
+    vpc_id:           "{{ vpc_id }}"
+    cidr:             "{{ private_subnet_b_cidr }}"
+    az:               "{{ private_subnet_b_az }}"
+    region:           "{{ vpc_region }}"
+    aws_access_key:   "{{ aws_access_key }}"
+    aws_secret_key:   "{{ aws_secret_key }}"
+    resource_tags:
+      Name:           "{{ vpc_name }} - Private Subnet "
+  register: my_private_subnet_b
+# ============================================================
+- name:               Set Public Subnet ID of zone a in variable
+  set_fact:
+    public_subnet_id_a: "{{ my_public_subnet_a.subnet.id }}"
+# ============================================================
+- name:               Set Public Subnet ID of zone b in variable
+  set_fact:
+    public_subnet_id_b: "{{ my_public_subnet_b.subnet.id }}"
+# ============================================================
+- name:               Set Private a Subnet ID in variable
+  set_fact:
+    private_subnet_id_a: "{{ my_private_subnet_a.subnet.id }}"
+# ============================================================
+- name:               Set Private b Subnet ID in variable
+  set_fact:
+    private_subnet_id_b: "{{ my_private_subnet_b.subnet.id }}"
+# ============================================================
+- debug: var=public_subnet_id_a
+- debug: var=public_subnet_id_b
+- debug: var=my_public_subnet_a
+- debug: var=my_public_subnet_b
+- debug: var=private_subnet_id_a    
+- debug: var=private_subnet_id_b
+- debug: var=my_private_subnet_a
+- debug: var=my_private_subnet_b
