@@ -1,25 +1,3 @@
-- name: Create AWS Environment
-  hosts: localhost
-  gather_facts: False
-  vars_files:
-    - vars/aws.yml
-    - vars/aws_credentials.yml
-  tasks:
-    - name: Get the current username
-      local_action: command whoami
-      register: username_on_the_host
-    - import_tasks: tasks/ec2_create_keypair.yml
-    - import_tasks: tasks/ec2_create_vpc.yml
-    - import_tasks: tasks/ec2_create_securitygroups.yml
-    - import_tasks: tasks/ec2_create_subnets.yml
-    - import_tasks: tasks/ec2_create_internet_gateway.yml
-#    - import_tasks: tasks/ec2_create_elasticip.yml
-    - import_tasks: tasks/ec2_create_nat_gateway.yml
-    - import_tasks: tasks/ec2_create_routes.yml
-    - import_tasks: tasks/ec2_create_load_balancer.yml
-    - import_tasks: tasks/ec2_create_instance_frontend.yml
-    - import_tasks: tasks/ec2_create_instance_backend.yml
-    - import_tasks: tasks/ec2_add-key-pair-and-public-key.yml
 - name: Setup frontend  instances on AWS Environment with nginx
   hosts: webservers
   gather_facts: False
