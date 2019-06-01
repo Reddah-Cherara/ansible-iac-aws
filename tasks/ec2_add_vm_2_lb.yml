@@ -7,8 +7,6 @@
     region: "{{ aws_region }}"
   with_items: "{{ ec2instance_frontend_a.instances }}"
   ignore_errors: yes
-  
-
 - name: add the webservers frontend B to the load balancer
   local_action: ec2_elb
   args:
