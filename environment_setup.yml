@@ -8,8 +8,3 @@
   gather_facts: False
   tasks:
     - import_tasks: tasks/ec2_setup_backend.yml
-- name: Assigne backend and frontend instances in Load Balancers
-  hosts: localhost
-  gather_facts: False
-  tasks:
-    - import_tasks: tasks/ec2_add_vm_2_lb.yml
