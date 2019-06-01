@@ -1,3 +1,5 @@
+- name: Refresh inventory to ensure new instaces exist in inventory
+  meta: refresh_inventory
 - name: Install nginx on webservers ec2 frontend instances 
   hosts: webservers
   gather_facts: False
