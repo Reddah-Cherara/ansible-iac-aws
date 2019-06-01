@@ -1,3 +1,5 @@
+- name: Refresh inventory to ensure new instaces exist in inventory
+  meta: refresh_inventory
 - name: ensure nginx is at the latest version
   apt: name=nginx state=latest
   become: yes

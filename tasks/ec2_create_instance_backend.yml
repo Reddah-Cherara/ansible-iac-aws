@@ -60,8 +60,8 @@
 # ============================================================
 - name: Insert a line with groupe microservices at the end of a file.
   lineinfile:
-    path: /Users/rcherara/Projects-AWS/rcherara-aws-ansible-new/hosts
-    line: [microservices]
+    path: ./hosts
+    line: "[microservices]"
 
 - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
   local_action: lineinfile 

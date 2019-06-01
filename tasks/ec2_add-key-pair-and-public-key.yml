@@ -1,11 +1,16 @@
+- name: ssh agent
+  command: ssh-agent bash
 - name: add ec2 key-pair (*.pem) into the localmachine ansible agent
   command: ssh-add ./files/rcherara-provision-development-key.pem
+  ignore_errors: yes
 - name: add public key to the authorized_keys file on frontend machine for the zone a
   command: ssh-copy-id -f ubuntu@{{ item.public_ip }}
   with_items:           "{{ ec2instance_frontend_a.instances }}"
+  ignore_errors: yes
 - name: add public key to the authorized_keys file on frontend machine for the zone b
   command: ssh-copy-id -f ubuntu@{{ item.public_ip }}
   with_items:           "{{ ec2instance_frontend_b.instances }}"
+  ignore_errors: yes
 - name: add public key to the authorized_keys file on backend machine for the zone a
   command: ssh-copy-id -f ubuntu@{{ item.public_ip }}
   with_items:           "{{ ec2instance_backend_a.instances }}"

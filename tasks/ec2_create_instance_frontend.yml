@@ -61,7 +61,7 @@
 # ============================================================
 - name: Insert a line with groupe webservers at the end of a file.
   lineinfile:
-    path: /Users/rcherara/Projects-AWS/rcherara-aws-ansible-new/hosts
+    path: /home/ubuntu/ansible-iac-aws/hosts
     line: "[webservers]"
 
 - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
